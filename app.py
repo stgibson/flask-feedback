@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
+from forms import NewUserForm
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "kubrick"
@@ -26,4 +27,6 @@ def show_register_page():
         Shows form for user to register
         rtype: str
     """
-    return render_template("register.html")
+    form = NewUserForm()
+
+    return render_template("register.html", form=form)
