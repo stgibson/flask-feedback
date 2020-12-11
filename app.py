@@ -21,12 +21,28 @@ def go_to_register_page():
     """
     return redirect("/register")
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def show_register_page():
     """
-        Shows form for user to register
+        Shows a form for user to register. When the form is submitted,
+        registers the user with the input the user submitted.
         rtype: str
     """
     form = NewUserForm()
+
+    if form.validate_on_submit():
+        # get data submitted
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+
+        # register user
+        user = User.register(username, password, email, first_name, last_name)
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect("/secret")
 
     return render_template("register.html", form=form)
