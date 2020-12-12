@@ -41,6 +41,7 @@ def register():
 
         # register user
         user = User.register(username, password, email, first_name, last_name)
+        session["username"] = user.username
         db.session.add(user)
         
         # might break if username has already been used
@@ -50,7 +51,7 @@ def register():
             form.username.errors.append("That username already exists")
             return render_template("register.html", form=form)
 
-        return redirect("/secret")
+        return redirect(f"/user/{username}")
 
     return render_template("register.html", form=form)
 
@@ -71,21 +72,11 @@ def login():
         # authenticate user
         user = User.authenticate(username, password)
         if user:
-            session["current_user"] = user.username
-            return redirect("/secret")
+            session["username"] = user.username
+            return redirect(f"/users/{username}")
         flash("Incorrect credentials. Please try again.", "danger")
 
     return render_template("login.html", form=form)
-
-@app.route("/secret")
-def show_secret_page():
-    """
-        Shows page that displays the text "You made it!"
-        rtype: str
-    """
-    if session.get("current_user", None):
-        return "You made it!"
-    return redirect("/")
 
 @app.route("/logout")
 def logout():
@@ -93,5 +84,20 @@ def logout():
         Logs user out so they can no longer access the features of the app
         rtype: str
     """
-    session.pop("current_user")
+    if session.get("username", None):
+        session.pop("username")
+    return redirect("/")
+
+@app.route("/users/<username>")
+def show_user_page(username):
+    """
+        Shows the user's information along with a list of their feedback
+        type username: str
+        rtype: str
+    """
+    # make sure user is accessing his/her own page
+    current_username = session.get("username", None)
+    if current_username and current_username == username:
+        current_user = User.query.filter_by(username=current_username).one()
+        return render_template("user.html", user=current_user)
     return redirect("/")
