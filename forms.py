@@ -16,3 +16,12 @@ class NewUserForm(FlaskForm):
     first_name = StringField("First name", validators=[InputRequired()])
 
     last_name = StringField("Last name", validators=[InputRequired()])
+
+class LoginUserForm(FlaskForm):
+    """
+        Template for the form for a user to login. Has inputs for a username
+        and password.
+    """
+    username = StringField("Username", validators=[InputRequired()])
+
+    password = PasswordField("Password", validators=[InputRequired()])

@@ -1,7 +1,7 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
-from forms import NewUserForm
+from forms import NewUserForm, LoginUserForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def go_to_register_page():
     return redirect("/register")
 
 @app.route("/register", methods=["GET", "POST"])
-def show_register_page():
+def register():
     """
         Shows a form for user to register. When the form is submitted,
         registers the user with the input the user submitted.
@@ -53,6 +53,28 @@ def show_register_page():
         return redirect("/secret")
 
     return render_template("register.html", form=form)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """
+        Shows a form for user to login. When the form is submitted, if the user
+        typed in his or her correct credentials, goes to the secret page.
+        rtype: str
+    """
+    form = LoginUserForm()
+
+    if form.validate_on_submit():
+        # get data submitted
+        username = form.username.data
+        password = form.password.data
+
+        # authenticate user
+        user = User.authenticate(username, password)
+        if user:
+            return redirect("/secret")
+        flash("Incorrect credentials. Please try again.", "danger")
+
+    return render_template("login.html", form=form)
 
 @app.route("/secret")
 def show_secret_page():
