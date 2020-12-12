@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from forms import NewUserForm
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "kubrick"
@@ -41,8 +42,22 @@ def show_register_page():
         # register user
         user = User.register(username, password, email, first_name, last_name)
         db.session.add(user)
-        db.session.commit()
+        
+        # might break if username has already been used
+        try:
+            db.session.commit()
+        except IntegrityError:
+            form.username.errors.append("That username already exists")
+            return render_template("register.html", form=form)
 
         return redirect("/secret")
 
     return render_template("register.html", form=form)
+
+@app.route("/secret")
+def show_secret_page():
+    """
+        Shows page that displays the text "You made it!"
+        rtype: str
+    """
+    return "You made it!"
