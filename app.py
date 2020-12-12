@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, flash
+from flask import Flask, redirect, render_template, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from forms import NewUserForm, LoginUserForm
@@ -71,6 +71,7 @@ def login():
         # authenticate user
         user = User.authenticate(username, password)
         if user:
+            session["current_user"] = user.username
             return redirect("/secret")
         flash("Incorrect credentials. Please try again.", "danger")
 
@@ -82,4 +83,15 @@ def show_secret_page():
         Shows page that displays the text "You made it!"
         rtype: str
     """
-    return "You made it!"
+    if session.get("current_user", None):
+        return "You made it!"
+    return redirect("/")
+
+@app.route("/logout")
+def logout():
+    """
+        Logs user out so they can no longer access the features of the app
+        rtype: str
+    """
+    session.pop("current_user")
+    return redirect("/")
