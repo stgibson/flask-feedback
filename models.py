@@ -30,6 +30,9 @@ class User(db.Model):
 
     last_name = db.Column(db.VARCHAR(30), nullable=False)
 
+    feedbacks = db.relationship("Feedback", backref="user", \
+        cascade="all, delete-orphan")
+
     @classmethod
     def register(cls, username, password, email, first_name, last_name):
         """
@@ -61,3 +64,18 @@ class User(db.Model):
             # verify hashed password matched password submitted by user
             if bcrypt.check_password_hash(hashed, password):
                 return user
+
+class Feedback(db.Model):
+    """
+        Creates schema for feedbacks. Includes an id, title, content, and
+        the username of the user that created the feedback.
+    """
+    __tablename__ = "feedbacks"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    title = db.Column(db.VARCHAR(100), nullable=False)
+
+    content = db.Column(db.Text, nullable=False)
+
+    username = db.Column(db.VARCHAR(20), db.ForeignKey("users.username"))
