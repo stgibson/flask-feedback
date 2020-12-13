@@ -109,7 +109,7 @@ def show_user_page(username):
     if current_username and current_username == username:
         current_user = User.query.filter_by(username=current_username).one()
         return render_template("user.html", user=current_user)
-    return redirect("/")
+    return render_template("401.html"), 401
 
 @app.route("/users/<username>/delete", methods=["POST"])
 def delete_user(username):
@@ -192,3 +192,7 @@ def delete_feedback(feedback_id):
         db.session.commit()
         return redirect(f"/users/{current_username}")
     return redirect("/")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html")
