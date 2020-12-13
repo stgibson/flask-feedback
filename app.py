@@ -51,7 +51,7 @@ def register():
             form.username.errors.append("That username already exists")
             return render_template("register.html", form=form)
 
-        return redirect(f"/user/{username}")
+        return redirect(f"/users/{username}")
 
     return render_template("register.html", form=form)
 
@@ -101,3 +101,20 @@ def show_user_page(username):
         current_user = User.query.filter_by(username=current_username).one()
         return render_template("user.html", user=current_user)
     return redirect("/")
+
+@app.route("/users/<username>/delete", methods=["POST"])
+def delete_user(username):
+    """
+        Deletes user and then logs user out
+        type username: str
+        rtype: str
+    """
+    # can only delete own account
+    current_username = session.get("username", None)
+    if current_username and current_username == username:
+        current_user = User.query.filter_by(username=current_username).one()
+        db.session.delete(current_user)
+        db.session.commit()
+        # logout to remove user from session
+        return redirect("/logout")
+    return redirect(f"/users/{username}")

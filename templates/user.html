@@ -21,10 +21,22 @@
       </div>
     </div>
   {% endfor %}
-  <a class="btn btn-primary" href="/users/{{user.username}}/feedback/add">
-    Add Feedback
-  </a>
-  <a class="btn btn-danger" href="/users/{{user.username}}/delete">
-    Delete Account
-  </a>
+  <form>
+    <button
+      class="btn btn-primary"
+      type="submit"
+      formaction="/users/{{user.username}}/feedback/add"
+      formmethod="GET"
+    >
+      Add Feedback
+    </a>
+    <button
+      class="btn btn-danger ml-1"
+      type="submit"
+      formaction="/users/{{user.username}}/delete"
+      formmethod="POST"
+    >
+      Delete Account
+    </button>
+  </form>
 {% endblock %}
