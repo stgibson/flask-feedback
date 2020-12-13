@@ -25,3 +25,11 @@ class LoginUserForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired()])
 
     password = PasswordField("Password", validators=[InputRequired()])
+
+class FeedbackForm(FlaskForm):
+    """
+        Template for adding a new feedback. Has inputs for title and content.
+    """
+    title = StringField("Title", validators=[InputRequired()])
+
+    content = StringField("Content", validators=[InputRequired()])

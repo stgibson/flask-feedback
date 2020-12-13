@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Add Feedback Page{% endblock %}
+
+{% block content %}
+  <h1 class="my-4">Add Feedback</h1>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != "hidden" %}
+      <div class="form-group mb-3">
+        {{field.label}}
+        {{field(class_="form-control")}}
+        {% for error in field.errors %}
+          <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <a class="btn btn-outline-info" href="/users/{{session['username']}}">
+      Cancel
+    </a>
+    <button class="btn btn-success" type="submit">Add</button>
+  </form>
+{% endblock %}
