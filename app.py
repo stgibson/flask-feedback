@@ -29,6 +29,11 @@ def register():
         registers the user with the input the user submitted.
         rtype: str
     """
+    # if already logged in, go to user's page
+    current_username = session.get("username", None)
+    if current_username:
+        return redirect(f"/users/{current_username}")
+
     form = NewUserForm()
 
     if form.validate_on_submit():
@@ -62,6 +67,10 @@ def login():
         typed in his or her correct credentials, goes to the secret page.
         rtype: str
     """
+    # if already logged in, go to user's page
+    current_username = session.get("username", None)
+    if current_username:
+        return redirect(f"/users/{current_username}")
     form = LoginUserForm()
 
     if form.validate_on_submit():
