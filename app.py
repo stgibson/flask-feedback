@@ -147,8 +147,8 @@ def add_feedback(username):
 @app.route("/feedback/<int:feedback_id>/update", methods=["GET", "POST"])
 def edit_feedback(feedback_id):
     """
-        Shows form to edit feedback, and when the form is submitted, the
-        feedback is edited and updated in the db
+        Shows form to edit the feedback with id feedback_id, and when the form
+        is submitted, the feedback is edited and updated in the db
         type feedback_id: int
         rtype: str
     """
@@ -166,4 +166,20 @@ def edit_feedback(feedback_id):
             return redirect(f"/users/{current_username}")
         # if get request, show form
         return render_template("edit-feedback.html", form=form)
+    return redirect("/")
+
+@app.route("/feedback/<int:feedback_id>/delete", methods=["POST"])
+def delete_feedback(feedback_id):
+    """
+        Deletes the feedback with id feedback_id
+        type feedback_id: int
+        rtype: str
+    """
+    # first make sure user is allowed to delete feedback
+    current_username = session.get("username", None)
+    feedback = Feedback.query.get_or_404(feedback_id)
+    if current_username and current_username == feedback.username:
+        db.session.delete(feedback)
+        db.session.commit()
+        return redirect(f"/users/{current_username}")
     return redirect("/")

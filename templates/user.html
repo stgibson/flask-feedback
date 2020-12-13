@@ -18,12 +18,22 @@
       <div class="card-body">
         <h5 class="card-title">{{feedback.title}}</h5>
         <p class="card-text">{{feedback.content}}</p>
-        <a
-          class="btn btn-warning btn-sm p-0"
-          href="/feedback/{{feedback.id}}/update"
-        >
-          Edit
-        </a>
+        <form>
+          <button
+            class="btn btn-warning btn-sm p-0"
+            formaction="/feedback/{{feedback.id}}/update"
+            formmethod="GET"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-danger btn-sm p-0 px-1"
+            formaction="/feedback/{{feedback.id}}/delete"
+            formmethod="POST"
+          >
+            X
+          </button>
+        </form>
       </div>
     </div>
   {% endfor %}
