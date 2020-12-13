@@ -18,6 +18,12 @@
       <div class="card-body">
         <h5 class="card-title">{{feedback.title}}</h5>
         <p class="card-text">{{feedback.content}}</p>
+        <a
+          class="btn btn-warning btn-sm p-0"
+          href="/feedback/{{feedback.id}}/update"
+        >
+          Edit
+        </a>
       </div>
     </div>
   {% endfor %}
