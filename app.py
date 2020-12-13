@@ -126,7 +126,7 @@ def delete_user(username):
         db.session.commit()
         # logout to remove user from session
         return redirect("/logout")
-    return redirect("/")
+    return render_template("401.html"), 401
 
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def add_feedback(username):
@@ -151,7 +151,7 @@ def add_feedback(username):
             return redirect(f"/users/{username}")
         # if get request, show form
         return render_template("add-feedback.html", form=form)
-    return redirect("/")
+    return render_template("401.html"), 401
 
 @app.route("/feedback/<int:feedback_id>/update", methods=["GET", "POST"])
 def edit_feedback(feedback_id):
@@ -175,7 +175,7 @@ def edit_feedback(feedback_id):
             return redirect(f"/users/{current_username}")
         # if get request, show form
         return render_template("edit-feedback.html", form=form)
-    return redirect("/")
+    return render_template("401.html"), 401
 
 @app.route("/feedback/<int:feedback_id>/delete", methods=["POST"])
 def delete_feedback(feedback_id):
@@ -191,7 +191,7 @@ def delete_feedback(feedback_id):
         db.session.delete(feedback)
         db.session.commit()
         return redirect(f"/users/{current_username}")
-    return redirect("/")
+    return render_template("401.html"), 401
 
 @app.errorhandler(404)
 def page_not_found(e):
