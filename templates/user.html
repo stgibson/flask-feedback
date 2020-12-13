@@ -47,7 +47,15 @@
       Add Feedback
     </a>
     <button
-      class="btn btn-danger ml-1"
+      class="btn btn-info mx-1"
+      type="submit"
+      formaction="/logout"
+      formmethod="GET"
+    >
+      Logout
+    </button>
+    <button
+      class="btn btn-danger"
       type="submit"
       formaction="/users/{{user.username}}/delete"
       formmethod="POST"

@@ -4,6 +4,9 @@
 
 {% block content %}
   <h1 class="my-4">Create an account</h1>
+  <div class="mb-3">
+    Already have an account? <a href="/login">Login here</a>
+  </div>
   <form method="POST">
     {{ form.hidden_tag() }}
     {% for field in form if field.widget.input_type != "hidden" %}
